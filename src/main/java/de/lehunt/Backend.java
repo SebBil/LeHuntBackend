@@ -78,7 +78,7 @@ public class Backend {
 
     public interface HintLookupCallback {
 
-        String lookupHint(String payload);
+        String lookupHint(String hintID);
 
     }
 
@@ -87,20 +87,49 @@ public class Backend {
         @Override
         public String lookupHint(String payload) {
             JSONObject json = new JSONObject(payload);
+            String HuntAndBeaconID = json.getString("adverstisment");
 
-            String hintId = json.getString("adverstisment");
-            switch (hintId) {
-                case "1":
-                    return "Insert ur first hint here";
-                case "2":
-                    return "Another hint";
-                // TODO Insert more hints here...
-                default:
-                    return "Hint was not found on backend.";
+            String tmp[] = HuntAndBeaconID.split("-");
+            String HuntID = tmp[0];
+            String BeaconID = tmp[1];
+
+            if(HuntID.equalsIgnoreCase("100")){
+                switch (BeaconID) {
+                    case "1":
+                        return "This is your second Hint, so you can find your first station." +
+                                "jfiöoreajfioewaönfewajfiewaoöfewajfiewa" +
+                                "fjeöajfioewajifvreujgiföoreaijfoewjaifojrewaf" +
+                                "fieauireajfioewöajfioewaöjivfera waef" +
+                                "fioöewa fjfiöoeajfoiewa jfifaj afjioewa jfewa" +
+                                " feijoaöjfi owjf waifjiewoaf iw fwea jfwejaireh" +
+                                " fj oiewaöjfiwaf jwoafj ioajfi oewaöjfo2jfoiewajf ier" +
+                                " fjieowajfiwajfiwojf oigiqjg ioewaf4i3g 80 fj fwifjoiew";
+                    case "2":
+                        return "This is your third Hint, so you can find the next station." +
+                                "fijeowa fjw ieaofjiwoaf wf wifj ewiaojfoiewa  fjwaf wea" +
+                                "fje iwaojf iwafjoa jfiwa jfiewjaf io ewajfioew afi ajf" +
+                                "f jewoiaöjfi jier gfoiewaj fiewaj fiewjifo jewaio jfoiew" +
+                                "j ifewoajf oiwajfi ajfiwoajfiowahgie jgioajfwiajfiewa jfoiew" +
+                                "fj iwafwjfioewjafiowa jfiewoa jfiewoaöjfiewajf oiewhvidja" +
+                                " fjioewajfaöjioewj fw wi afwiajf iowa jiwaf jiewfoiewa jfoi" +
+                                "fjei wafjew oiafj iwaofjoiewjf oiewajf owajf ewoi jfoiewa";
+                    default:
+                        return "Hint was not found on backend.";
+                }
+            } else if (HuntID.equalsIgnoreCase("101")){
+                switch (BeaconID) {
+                    case "1":
+                        return "Insert ur first hint here";
+                    case "2":
+                        return "Another hint";
+                    // TODO Insert more hints here...
+                    default:
+                        return "Hint was not found on backend.";
+                }
+            } else {
+                return "Error: Hunt does not exist";
             }
         }
-
-
     }
 
     public static void main(String[] args) {
