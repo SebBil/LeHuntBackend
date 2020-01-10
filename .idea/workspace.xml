@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="30f37736-1fb0-4770-abc2-b699453635c5" name="Default" comment="">
+    <list default="true" id="30f37736-1fb0-4770-abc2-b699453635c5" name="Default" comment="Backend init">
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/lehunt/Backend.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/lehunt/Backend.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/LeHuntBackend-1.0-SNAPSHOT.jar" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/de/lehunt/Backend$OnMessageCallback.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/de/lehunt/Backend$OnMessageCallback.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/de/lehunt/Backend.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/de/lehunt/Backend.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,6 +51,9 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
@@ -153,6 +152,10 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="325" y="43" key="#Project_Structure" timestamp="1578692659363">
+      <screen x="101" y="0" width="1265" height="768" />
+    </state>
+    <state x="325" y="43" key="#Project_Structure/101.0.1265.768@101.0.1265.768" timestamp="1578692659363" />
     <state x="508" y="187" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1578692270925">
       <screen x="99" y="0" width="1267" height="768" />
     </state>
@@ -169,24 +172,28 @@
       <screen x="101" y="0" width="1819" height="1080" />
     </state>
     <state x="740" y="288" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/101.0.1819.1080/1920.26.1680.1010@101.0.1819.1080" timestamp="1578678439134" />
-    <state width="1224" height="192" key="GridCell.Tab.0.bottom" timestamp="1578692408345">
-      <screen x="99" y="0" width="1267" height="768" />
+    <state width="1222" height="156" key="GridCell.Tab.0.bottom" timestamp="1578692793240">
+      <screen x="101" y="0" width="1265" height="768" />
     </state>
+    <state width="1222" height="156" key="GridCell.Tab.0.bottom/101.0.1265.768@101.0.1265.768" timestamp="1578692793240" />
     <state width="1776" height="242" key="GridCell.Tab.0.bottom/101.0.1819.1080/1920.26.1680.1010@101.0.1819.1080" timestamp="1578682673887" />
     <state width="1224" height="192" key="GridCell.Tab.0.bottom/99.0.1267.768@99.0.1267.768" timestamp="1578692408345" />
-    <state width="1224" height="192" key="GridCell.Tab.0.center" timestamp="1578692408345">
-      <screen x="99" y="0" width="1267" height="768" />
+    <state width="1222" height="156" key="GridCell.Tab.0.center" timestamp="1578692793240">
+      <screen x="101" y="0" width="1265" height="768" />
     </state>
+    <state width="1222" height="156" key="GridCell.Tab.0.center/101.0.1265.768@101.0.1265.768" timestamp="1578692793240" />
     <state width="1776" height="242" key="GridCell.Tab.0.center/101.0.1819.1080/1920.26.1680.1010@101.0.1819.1080" timestamp="1578682673887" />
     <state width="1224" height="192" key="GridCell.Tab.0.center/99.0.1267.768@99.0.1267.768" timestamp="1578692408345" />
-    <state width="1224" height="192" key="GridCell.Tab.0.left" timestamp="1578692408345">
-      <screen x="99" y="0" width="1267" height="768" />
+    <state width="1222" height="156" key="GridCell.Tab.0.left" timestamp="1578692793240">
+      <screen x="101" y="0" width="1265" height="768" />
     </state>
+    <state width="1222" height="156" key="GridCell.Tab.0.left/101.0.1265.768@101.0.1265.768" timestamp="1578692793240" />
     <state width="1776" height="242" key="GridCell.Tab.0.left/101.0.1819.1080/1920.26.1680.1010@101.0.1819.1080" timestamp="1578682673887" />
     <state width="1224" height="192" key="GridCell.Tab.0.left/99.0.1267.768@99.0.1267.768" timestamp="1578692408345" />
-    <state width="1224" height="192" key="GridCell.Tab.0.right" timestamp="1578692408345">
-      <screen x="99" y="0" width="1267" height="768" />
+    <state width="1222" height="156" key="GridCell.Tab.0.right" timestamp="1578692793240">
+      <screen x="101" y="0" width="1265" height="768" />
     </state>
+    <state width="1222" height="156" key="GridCell.Tab.0.right/101.0.1265.768@101.0.1265.768" timestamp="1578692793240" />
     <state width="1776" height="242" key="GridCell.Tab.0.right/101.0.1819.1080/1920.26.1680.1010@101.0.1819.1080" timestamp="1578682673887" />
     <state width="1224" height="192" key="GridCell.Tab.0.right/99.0.1267.768@99.0.1267.768" timestamp="1578692408345" />
     <state width="1224" height="239" key="GridCell.Tab.1.bottom" timestamp="1578690832725">
@@ -214,21 +221,5 @@
       <screen x="99" y="0" width="1267" height="768" />
     </state>
     <state x="541" y="301" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/99.0.1267.768@99.0.1267.768" timestamp="1578692377886" />
-  </component>
-  <component name="masterDetails">
-    <states>
-      <state key="ProjectJDKs.UI">
-        <settings>
-          <last-edited>1.8</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-    </states>
   </component>
 </project>

@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 public class Backend {
 
-    private static final  String BROKER = "tcp://bilda.ddnss.de:1883";
+    private static final  String BROKER = "tcp://192.168.2.184:1883";
     private static final int QOS_EXACTLY_ONCE = 1;
     private final String  clientId = "BackendClient";
     private final String SubscritionTopic = "+/+/up";
