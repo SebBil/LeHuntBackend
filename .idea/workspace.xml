@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="30f37736-1fb0-4770-abc2-b699453635c5" name="Default" comment="Backend init">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="30f37736-1fb0-4770-abc2-b699453635c5" name="Default" comment="Changing to HiveMQ client library, added retain pubishes for the first hints">
       <change beforePath="$PROJECT_DIR$/src/main/java/de/lehunt/Backend.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/lehunt/Backend.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -177,10 +176,11 @@
     </state>
     <state x="815" y="250" key="#com.intellij.ide.util.MemberChooser/101.0.1819.1080/1920.26.1680.1010@101.0.1819.1080" timestamp="1578682291282" />
     <state x="596" y="178" key="#com.intellij.ide.util.MemberChooser/99.0.1267.768@99.0.1267.768" timestamp="1578783848549" />
-    <state x="796" y="384" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1578829772173">
-      <screen x="101" y="0" width="1819" height="1080" />
+    <state x="2008" y="94" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1578862754608">
+      <screen x="1366" y="-279" width="1680" height="1050" />
     </state>
     <state x="796" y="384" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/101.0.1819.1080/1920.26.1680.1010@101.0.1819.1080" timestamp="1578829772173" />
+    <state x="2008" y="94" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/99.0.1267.768/1366.-279.1680.1050@1366.-279.1680.1050" timestamp="1578862754608" />
     <state x="583" y="273" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/99.0.1267.768@99.0.1267.768" timestamp="1578694858319" />
     <state x="740" y="288" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1578678439134">
       <screen x="101" y="0" width="1819" height="1080" />
@@ -253,6 +253,10 @@
       <screen x="99" y="0" width="1267" height="768" />
     </state>
     <state x="541" y="301" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/99.0.1267.768@99.0.1267.768" timestamp="1578783282307" />
+    <state x="1862" y="103" key="run.anything.popup" timestamp="1578863809545">
+      <screen x="1366" y="-279" width="1680" height="1050" />
+    </state>
+    <state x="1862" y="103" key="run.anything.popup/99.0.1267.768/1366.-279.1680.1050@1366.-279.1680.1050" timestamp="1578863809545" />
     <state x="673" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1578830136698">
       <screen x="101" y="0" width="1819" height="1080" />
     </state>

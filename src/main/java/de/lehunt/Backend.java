@@ -5,7 +5,6 @@ import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient;
 import com.hivemq.client.mqtt.mqtt3.Mqtt3Client;
 import com.hivemq.client.mqtt.mqtt3.message.connect.connack.Mqtt3ConnAck;
 import com.hivemq.client.mqtt.mqtt3.message.publish.Mqtt3Publish;
-import com.hivemq.client.mqtt.mqtt3.message.subscribe.suback.Mqtt3SubAck;
 import org.json.JSONObject;
 
 import java.util.concurrent.ExecutionException;
@@ -45,15 +44,15 @@ public class Backend {
         OnMessageCallback onMessageCallback = new OnMessageCallback(mqttClient, hintLookupCallback);
 
         mqttClient.subscribeWith()
-                    .topicFilter(SubscritionTopic) //TODO adjust the topic filter
-                    .qos(MqttQos.EXACTLY_ONCE)
-                    .callback(onMessageCallback)
-                    .send();
-        System.out.println("Backend subscribed successful topics on:  " + SubscritionTopic +  " for getting all messages of the mobile clients.");
+                .topicFilter(SubscritionTopic) //TODO adjust the topic filter
+                .qos(MqttQos.EXACTLY_ONCE)
+                .callback(onMessageCallback)
+                .send();
+        System.out.println("Backend subscribed successful topics on:  " + SubscritionTopic + " for getting all messages of the mobile clients.");
     }
 
     // TODO: 12.01.2020 Setup retained message to all hunt topics with
-    private void SetupFirstHints(){
+    private void SetupFirstHints() {
         /* First hint for hunt1 */
         mqttClient.publishWith()
                 .topic("hunt1/+/up")
@@ -87,26 +86,24 @@ public class Backend {
 
         @Override
         public void accept(Mqtt3Publish mqtt3Publish) {
-
             String topic = mqtt3Publish.getTopic().toString();
-            String splittedTopic[] = topic.split("/");
 
-            String clientId = splittedTopic[1];
-            String huntId = splittedTopic[0];
-            JSONObject json = null;
-            System.out.println("Message arrived on topic: '" + topic + "' with payload: '" + mqtt3Publish.getPayloadAsBytes() + "'");
-
-            // lookup new Hint
-            String hint = hintLookupCallback.lookupHint(huntId, new String(mqtt3Publish.getPayloadAsBytes()));
+            System.out.println("Message arrived on topic: '" + topic + "' with payload: '" + new String(mqtt3Publish.getPayloadAsBytes()) + "'");
 
             // create response Topic
+            String huntId = topic.split("/")[0];
+            String clientId = topic.split("/")[1];
             String responseTopic = huntId + "/" + clientId + "/down";
 
+            // lookup new Hint
+            String response = hintLookupCallback.lookupHint(huntId, new String(mqtt3Publish.getPayloadAsBytes()));
+
+
             // send out new Hint
-            System.out.println("Sending response on topic '" + responseTopic + "'" + " with payload '" + hint + "'.");
+            System.out.println("Sending response on topic '" + responseTopic + "'" + " with payload '" + response + "'.");
             client.publishWith()
                     .topic(responseTopic)
-                    .payload(hint.getBytes())
+                    .payload(response.getBytes())
                     .send();
 
         }
@@ -114,58 +111,69 @@ public class Backend {
 
     public interface HintLookupCallback {
 
-        String lookupHint(String huntid, String payload);
+        String lookupHint(String huntId, String payload);
 
     }
 
     public static class StaticHintLookupCallback implements HintLookupCallback {
 
         @Override
-        public String lookupHint(String huntid, String payload) {
+        public String lookupHint(String huntId, String payload) {
+
             JSONObject json = new JSONObject(payload);
-            String HuntAndBeaconID = json.getString("advertisment");
+            String type = json.getString("type");
+            String advertisment = json.getString("advertisment");
 
-            String tmp[] = HuntAndBeaconID.split("-");
-            String HuntID = tmp[0];
-            String BeaconID = tmp[1];
-
-            if (HuntID.equalsIgnoreCase("hunt1")) {
-                switch (BeaconID) {
-                    case "1":
-                        return "{\"message\":\"This is your second Hint, so you can find your first station." +
-                                "jfiöoreajfioewaönfewajfiewaoöfewajfiewa" +
-                                "fjeöajfioewajifvreujgiföoreaijfoewjaifojrewaf" +
-                                "fieauireajfioewöajfioewaöjivfera waef" +
-                                "fioöewa fjfiöoeajfoiewa jfifaj afjioewa jfewa" +
-                                " feijoaöjfi owjf waifjiewoaf iw fwea jfwejaireh" +
-                                " fj oiewaöjfiwaf jwoafj ioajfi oewaöjfo2jfoiewajf ier" +
-                                " fjieowajfiwajfiwojf oigiqjg ioewaf4i3g 80 fj fwifjoiew\"";
-                    case "2":
-                        return "This is your third Hint, so you can find the next station." +
-                                "fijeowa fjw ieaofjiwoaf wf wifj ewiaojfoiewa  fjwaf wea" +
-                                "fje iwaojf iwafjoa jfiwa jfiewjaf io ewajfioew afi ajf" +
-                                "f jewoiaöjfi jier gfoiewaj fiewaj fiewjifo jewaio jfoiew" +
-                                "j ifewoajf oiwajfi ajfiwoajfiowahgie jgioajfwiajfiewa jfoiew" +
-                                "fj iwafwjfioewjafiowa jfiewoa jfiewoaöjfiewajf oiewhvidja" +
-                                " fjioewajfaöjioewj fw wi afwiajf iowa jiwaf jiewfoiewa jfoi" +
-                                "fjei wafjew oiafj iwaofjoiewjf oiewajf owajf ewoi jfoiewa";
-                    default:
-                        return "Hint was not found on backend.";
+            // types are "NewBeacon" and "Registered"
+            switch (type) {
+                case "NewBeacon": {
+                    switch (huntId) {
+                        case "hunt1": {
+                            switch (advertisment) {
+                                case "1":
+                                    return "{type:NewInformation,message:This is your second Hint, so you can find your first station." +
+                                            "jfiöoreajfioewaönfewajfiewaoöfewajfiewa" +
+                                            "fjeöajfioewajifvreujgiföoreaijfoewjaifojrewaf" +
+                                            "fieauireajfioewöajfioewaöjivfera waef" +
+                                            "fioöewa fjfiöoeajfoiewa jfifaj afjioewa jfewa" +
+                                            " feijoaöjfi owjf waifjiewoaf iw fwea jfwejaireh" +
+                                            " fj oiewaöjfiwaf jwoafj ioajfi oewaöjfo2jfoiewajf ier" +
+                                            " fjieowajfiwajfiwojf oigiqjg ioewaf4i3g 80 fj fwifjoiew";
+                                case "2":
+                                    return "{type:NewInformation,message:This is your third Hint, so you can find the next station." +
+                                            "fijeowa fjw ieaofjiwoaf wf wifj ewiaojfoiewa  fjwaf wea" +
+                                            "fje iwaojf iwafjoa jfiwa jfiewjaf io ewajfioew afi ajf" +
+                                            "f jewoiaöjfi jier gfoiewaj fiewaj fiewjifo jewaio jfoiew" +
+                                            "j ifewoajf oiwajfi ajfiwoajfiowahgie jgioajfwiajfiewa jfoiew" +
+                                            "fj iwafwjfioewjafiowa jfiewoa jfiewoaöjfiewajf oiewhvidja" +
+                                            " fjioewajfaöjioewj fw wi afwiajf iowa jiwaf jiewfoiewa jfoi" +
+                                            "fjei wafjew oiafj iwaofjoiewjf oiewajf owajf ewoi jfoiewa";
+                                default:
+                                    return "type:Error:message:Hint was not found on backend.";
+                            }
+                        }
+                        case "hunt2": {
+                            switch (advertisment) {
+                                case "1":
+                                    return "type:NewInformation,message:First hint here";
+                                case "2":
+                                    return "type:NewInformation,message:Second hint there";
+                                default:
+                                    return "Hint was not found on backend.";
+                            }
+                        }
+                        default:
+                            return "{type:Error,message:Hunt doesn't exist";
+                    }
                 }
-            } else if (HuntID.equalsIgnoreCase("hunt2")) {
-                switch (BeaconID) {
-                    case "1":
-                        return "Insert ur first hint here";
-                    case "2":
-                        return "Another hint";
-                    // TODO Insert more hints here...
-                    default:
-                        return "Hint was not found on backend.";
-                }
-            } else {
-                return "Error: Hunt does not exist";
+                case "Registered":
+                    // sending the first hint to the client
+                    return "client registered, send first hint";
+                default:
+                    return "{type:Error,message:type doesn't exist";
             }
         }
+
 
     }
 
