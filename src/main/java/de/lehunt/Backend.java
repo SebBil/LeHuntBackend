@@ -49,7 +49,7 @@ public class Backend {
                     .qos(MqttQos.EXACTLY_ONCE)
                     .callback(onMessageCallback)
                     .send();
-        System.out.println("Client subscribed successful to topic " + SubscritionTopic);
+        System.out.println("Backend subscribed successful topics on:  " + SubscritionTopic +  " for getting all messages of the mobile clients.");
     }
 
     // TODO: 12.01.2020 Setup retained message to all hunt topics with
