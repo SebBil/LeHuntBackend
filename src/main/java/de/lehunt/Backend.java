@@ -122,14 +122,14 @@ public class Backend {
 
             JSONObject json = new JSONObject(payload);
             String type = json.getString("type");
-            String advertisment = json.getString("advertisment");
+            String advertisement = json.getString("advertisement");
 
             // types are "NewBeacon" and "Registered"
             switch (type) {
                 case "NewBeacon": {
                     switch (huntId) {
                         case "hunt1": {
-                            switch (advertisment) {
+                            switch (advertisement) {
                                 case "1":
                                     return "{type:NewInformation,message:This is your second Hint, so you can find your first station." +
                                             "jfiöoreajfioewaönfewajfiewaoöfewajfiewa" +
@@ -153,7 +153,7 @@ public class Backend {
                             }
                         }
                         case "hunt2": {
-                            switch (advertisment) {
+                            switch (advertisement) {
                                 case "1":
                                     return "type:NewInformation,message:First hint here";
                                 case "2":
