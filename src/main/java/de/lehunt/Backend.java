@@ -122,7 +122,7 @@ public class Backend {
 
             JSONObject json = new JSONObject(payload);
             String type = json.getString("type");
-            String advertisement = json.getString("advertisement");
+            int advertisement = json.getInt("advertisement");
 
             // types are "NewBeacon" and "Registered"
             switch (type) {
@@ -130,7 +130,7 @@ public class Backend {
                     switch (huntId) {
                         case "hunt1": {
                             switch (advertisement) {
-                                case "1":
+                                case 1:
                                     return "{type:NewInformation,message:This is your second Hint, so you can find your first station." +
                                             "jfiöoreajfioewaönfewajfiewaoöfewajfiewa" +
                                             "fjeöajfioewajifvreujgiföoreaijfoewjaifojrewaf" +
@@ -139,7 +139,7 @@ public class Backend {
                                             " feijoaöjfi owjf waifjiewoaf iw fwea jfwejaireh" +
                                             " fj oiewaöjfiwaf jwoafj ioajfi oewaöjfo2jfoiewajf ier" +
                                             " fjieowajfiwajfiwojf oigiqjg ioewaf4i3g 80 fj fwifjoiew";
-                                case "2":
+                                case 2:
                                     return "{type:NewInformation,message:This is your third Hint, so you can find the next station." +
                                             "fijeowa fjw ieaofjiwoaf wf wifj ewiaojfoiewa  fjwaf wea" +
                                             "fje iwaojf iwafjoa jfiwa jfiewjaf io ewajfioew afi ajf" +
@@ -154,9 +154,9 @@ public class Backend {
                         }
                         case "hunt2": {
                             switch (advertisement) {
-                                case "1":
+                                case 1:
                                     return "type:NewInformation,message:First hint here";
-                                case "2":
+                                case 2:
                                     return "type:NewInformation,message:Second hint there";
                                 default:
                                     return "Hint was not found on backend.";
