@@ -131,7 +131,7 @@ public class Backend {
                         case "hunt1": {
                             switch (advertisement) {
                                 case 1:
-                                    return "{message:This is your second Hint so you can find your first station." +
+                                    return "{type:NewInformation,message:This is your second Hint so you can find your first station." +
                                             "jfiöoreajfioewaönfewajfiewaoöfewajfiewa" +
                                             "fjeöajfioewajifvreujgiföoreaijfoewjaifojrewaf" +
                                             "fieauireajfioewöajfioewaöjivfera waef" +
@@ -147,9 +147,9 @@ public class Backend {
                                             "j ifewoajf oiwajfi ajfiwoajfiowahgie jgioajfwiajfiewa jfoiew" +
                                             "fj iwafwjfioewjafiowa jfiewoa jfiewoaöjfiewajf oiewhvidja" +
                                             " fjioewajfaöjioewj fw wi afwiajf iowa jiwaf jiewfoiewa jfoi" +
-                                            "fjei wafjew oiafj iwaofjoiewjf oiewajf owajf ewoi jfoiewa\"";
+                                            "fjei wafjew oiafj iwaofjoiewjf oiewajf owajf ewoi jfoiewa\"}";
                                 default:
-                                    return "\"type\":\"Error\":\"message\":\"Hint was not found on backend.\"}";
+                                    return "\"{type\":\"Error\":\"message\":\"Hint was not found on backend.\"}";
                             }
                         }
                         case "hunt2": {
