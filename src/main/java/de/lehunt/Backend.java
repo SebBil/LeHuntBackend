@@ -13,9 +13,8 @@ import java.util.function.Consumer;
 
 public class Backend {
 
-    private static final String BROKER = "192.168.2.184";
+    private static final String BROKER = "localhost";
     private final String CLIENTID = "BackendClient";
-    private static final int QOS_EXACTLY_ONCE = 1;
     private final String SubscritionTopic = "+/+/up";
     private Mqtt3AsyncClient mqttClient;
     private final HintLookupCallback hintLookupCallback;
