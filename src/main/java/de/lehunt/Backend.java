@@ -1,109 +1,145 @@
 package de.lehunt;
 
-import org.eclipse.paho.client.mqttv3.*;
+import com.hivemq.client.mqtt.datatypes.MqttQos;
+import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient;
+import com.hivemq.client.mqtt.mqtt3.Mqtt3Client;
+import com.hivemq.client.mqtt.mqtt3.message.connect.connack.Mqtt3ConnAck;
+import com.hivemq.client.mqtt.mqtt3.message.publish.Mqtt3Publish;
+import com.hivemq.client.mqtt.mqtt3.message.subscribe.suback.Mqtt3SubAck;
 import org.json.JSONObject;
+
+import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 public class Backend {
 
-    private static final  String BROKER = "tcp://192.168.2.184:1883";
+    private static final String BROKER = "192.168.2.184";
+    private final String CLIENTID = "BackendClient";
     private static final int QOS_EXACTLY_ONCE = 1;
-    private final String  clientId = "BackendClient";
     private final String SubscritionTopic = "+/+/up";
-    private MqttClient mqttClient;
+    private Mqtt3AsyncClient mqttClient;
     private final HintLookupCallback hintLookupCallback;
 
-    public Backend(HintLookupCallback hintLookupCallback){
+    public Backend(HintLookupCallback hintLookupCallback) {
         this.hintLookupCallback = hintLookupCallback;
     }
 
     public void start() {
-		try {
-            mqttClient = new MqttClient(BROKER, clientId);
 
-            MqttConnectOptions connOpts = new MqttConnectOptions();
-            connOpts.setCleanSession(true);
-            System.out.println("Connecting to broker: "+ BROKER);
-            mqttClient.connect();
-            System.out.println("Connected");
+        mqttClient = Mqtt3Client.builder()
+                .identifier(CLIENTID)
+                .serverHost(BROKER)
+                .buildAsync();
+        try {
+            Mqtt3ConnAck mqtt3ConnAck = mqttClient.connect().get();
+            if (mqtt3ConnAck.getReturnCode().isError()) {
+                System.out.println("Backend could not connect to MQTT Broker with address " + BROKER);
+            } else {
+                System.out.println("Backend conncted successfully to MQTT Broker with address " + BROKER);
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
 
-            OnMessageCallback callback = new OnMessageCallback(mqttClient, hintLookupCallback);
+        SetupFirstHints();
 
-		    mqttClient.subscribe(SubscritionTopic, QOS_EXACTLY_ONCE, callback);
-            System.out.println("Subscribed to Topics: " + SubscritionTopic);
+        OnMessageCallback onMessageCallback = new OnMessageCallback(mqttClient, hintLookupCallback);
 
-		} catch (MqttException e) {
-            System.out.println("Backend could not connect to MQTT Broker with address " + BROKER);
-			// e.printStackTrace();
-		};
+        mqttClient.subscribeWith()
+                    .topicFilter(SubscritionTopic) //TODO adjust the topic filter
+                    .qos(MqttQos.EXACTLY_ONCE)
+                    .callback(onMessageCallback)
+                    .send();
+        System.out.println("Client subscribed successful to topic " + SubscritionTopic);
     }
 
-    private static class OnMessageCallback implements IMqttMessageListener {
+    // TODO: 12.01.2020 Setup retained message to all hunt topics with
+    private void SetupFirstHints(){
+        /* First hint for hunt1 */
+        mqttClient.publishWith()
+                .topic("hunt1/+/up")
+                .retain(true)
+                .qos(MqttQos.EXACTLY_ONCE)
+                .payload("First hint in the hunt1. Begin your digital hunt".getBytes())
+                .send();
 
-        private final MqttClient client;
+        /* First hint for hunt2 */
+        mqttClient.publishWith()
+                .topic("hunt2/+/up")
+                .retain(true)
+                .qos(MqttQos.EXACTLY_ONCE)
+                .payload("First hint in the hunt2. Begin your digital hunt".getBytes())
+                .send();
+
+
+    }
+
+
+    private static class OnMessageCallback implements Consumer<Mqtt3Publish> {
+
+        private final Mqtt3AsyncClient client;
         private final HintLookupCallback hintLookupCallback;
 
-        private OnMessageCallback(MqttClient c, HintLookupCallback hlc){
+        private OnMessageCallback(Mqtt3AsyncClient c, HintLookupCallback hlc) {
             this.client = c;
             this.hintLookupCallback = hlc;
         }
 
         @Override
-        public void messageArrived(String topic, MqttMessage message) throws Exception {
+        public void accept(Mqtt3Publish mqtt3Publish) {
 
-            String[] splittedTopic = topic.split("/");
+            String topic = mqtt3Publish.getTopic().toString();
+            String splittedTopic[] = topic.split("/");
 
             String clientId = splittedTopic[1];
             String huntId = splittedTopic[0];
             JSONObject json = null;
-            try {
-                System.out.println("Message arrived on topic: '" + topic + "' with payload: '" + new String(message.getPayload()) + "'");
+            System.out.println("Message arrived on topic: '" + topic + "' with payload: '" + mqtt3Publish.getPayloadAsBytes() + "'");
 
-                // lookup new Hint
-                String hint = hintLookupCallback.lookupHint(new String(message.getPayload()));
+            // lookup new Hint
+            String hint = hintLookupCallback.lookupHint(huntId, new String(mqtt3Publish.getPayloadAsBytes()));
 
-                // create response Topic
-                String responseTopic = huntId + "/" + clientId + "/down";
+            // create response Topic
+            String responseTopic = huntId + "/" + clientId + "/down";
 
-                System.out.println("Sending response on topic '" + responseTopic + "'" + " with payload '" + hint + "'.");
-
-                // send out new Hint
-                client.publish(responseTopic, new MqttMessage(hint.getBytes()));
-            } catch (MqttException e) {
-                e.printStackTrace();
-            }
+            // send out new Hint
+            System.out.println("Sending response on topic '" + responseTopic + "'" + " with payload '" + hint + "'.");
+            client.publishWith()
+                    .topic(responseTopic)
+                    .payload(hint.getBytes())
+                    .send();
 
         }
-
     }
 
     public interface HintLookupCallback {
 
-        String lookupHint(String hintID);
+        String lookupHint(String huntid, String payload);
 
     }
 
     public static class StaticHintLookupCallback implements HintLookupCallback {
 
         @Override
-        public String lookupHint(String payload) {
+        public String lookupHint(String huntid, String payload) {
             JSONObject json = new JSONObject(payload);
-            String HuntAndBeaconID = json.getString("adverstisment");
+            String HuntAndBeaconID = json.getString("advertisment");
 
             String tmp[] = HuntAndBeaconID.split("-");
             String HuntID = tmp[0];
             String BeaconID = tmp[1];
 
-            if(HuntID.equalsIgnoreCase("100")){
+            if (HuntID.equalsIgnoreCase("hunt1")) {
                 switch (BeaconID) {
                     case "1":
-                        return "This is your second Hint, so you can find your first station." +
+                        return "{\"message\":\"This is your second Hint, so you can find your first station." +
                                 "jfiöoreajfioewaönfewajfiewaoöfewajfiewa" +
                                 "fjeöajfioewajifvreujgiföoreaijfoewjaifojrewaf" +
                                 "fieauireajfioewöajfioewaöjivfera waef" +
                                 "fioöewa fjfiöoeajfoiewa jfifaj afjioewa jfewa" +
                                 " feijoaöjfi owjf waifjiewoaf iw fwea jfwejaireh" +
                                 " fj oiewaöjfiwaf jwoafj ioajfi oewaöjfo2jfoiewajf ier" +
-                                " fjieowajfiwajfiwojf oigiqjg ioewaf4i3g 80 fj fwifjoiew";
+                                " fjieowajfiwajfiwojf oigiqjg ioewaf4i3g 80 fj fwifjoiew\"";
                     case "2":
                         return "This is your third Hint, so you can find the next station." +
                                 "fijeowa fjw ieaofjiwoaf wf wifj ewiaojfoiewa  fjwaf wea" +
@@ -116,7 +152,7 @@ public class Backend {
                     default:
                         return "Hint was not found on backend.";
                 }
-            } else if (HuntID.equalsIgnoreCase("101")){
+            } else if (HuntID.equalsIgnoreCase("hunt2")) {
                 switch (BeaconID) {
                     case "1":
                         return "Insert ur first hint here";
@@ -130,6 +166,7 @@ public class Backend {
                 return "Error: Hunt does not exist";
             }
         }
+
     }
 
     public static void main(String[] args) {
