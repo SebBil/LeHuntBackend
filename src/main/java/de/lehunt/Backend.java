@@ -40,7 +40,7 @@ public class Backend {
             e.printStackTrace();
         }
 
-        SetupFirstHints();
+        // SetupFirstHints();
 
         OnMessageCallback onMessageCallback = new OnMessageCallback(mqttClient, hintLookupCallback);
 
@@ -61,6 +61,7 @@ public class Backend {
                 .qos(MqttQos.EXACTLY_ONCE)
                 .payload("First hint in the hunt1. Begin your digital hunt".getBytes())
                 .send();
+        System.out.println("First Hint is set through retain message on hunt1/+/up");
 
         /* First hint for hunt2 */
         mqttClient.publishWith()
