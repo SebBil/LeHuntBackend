@@ -131,14 +131,14 @@ public class Backend {
                         case "hunt1": {
                             switch (advertisement) {
                                 case 1:
-                                    return "{\"type\":\"NewInformation\",\"message\":This is your second Hint so you can find your first station." +
+                                    return "{message:This is your second Hint so you can find your first station." +
                                             "jfiöoreajfioewaönfewajfiewaoöfewajfiewa" +
                                             "fjeöajfioewajifvreujgiföoreaijfoewjaifojrewaf" +
                                             "fieauireajfioewöajfioewaöjivfera waef" +
                                             "fioöewa fjfiöoeajfoiewa jfifaj afjioewa jfewa" +
                                             " feijoaöjfi owjf waifjiewoaf iw fwea jfwejaireh" +
                                             " fj oiewaöjfiwaf jwoafj ioajfi oewaöjfo2jfoiewajf ier" +
-                                            " fjieowajfiwajfiwojf oigiqjg ioewaf4i3g 80 fj fwifjoiew\"";
+                                            " fjieowajfiwajfiwojf oigiqjg ioewaf4i3g 80 fj fwifjoiew}";
                                 case 2:
                                     return "{\"type\":\"NewInformation\",\"message\":\"This is your third Hint so you can find the next station." +
                                             "fijeowa fjw ieaofjiwoaf wf wifj ewiaojfoiewa  fjwaf wea" +
@@ -149,7 +149,7 @@ public class Backend {
                                             " fjioewajfaöjioewj fw wi afwiajf iowa jiwaf jiewfoiewa jfoi" +
                                             "fjei wafjew oiafj iwaofjoiewjf oiewajf owajf ewoi jfoiewa\"";
                                 default:
-                                    return "\"type\":\"Error\":\"message\":\"Hint was not found on backend.\"";
+                                    return "\"type\":\"Error\":\"message\":\"Hint was not found on backend.\"}";
                             }
                         }
                         case "hunt2": {
