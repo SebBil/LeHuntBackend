@@ -2,6 +2,12 @@
   "id": "hunt1",
   "advertisements":[
     {
+      "0": {
+        "type": "NewInformation",
+        "message": "Hunt 1, Stations 0, Hinweis zum erreichen der Station 1: This is your first hint. Solve the challenge and search for station 1"
+      }
+    },
+    {
       "1": {
         "type": "NewInformation",
         "message": "Hunt 1, Stations 1, Hinweis zum erreichen der Station 2: This is your second Hint so you can find your first station.\njfiöoreajfioewaönfewajfiewaoöfewajfiewa fjeöajfioewajifvreujgiföoreaijfoewjaifojrewaf fieauireajfioewöajfioewaöjivfera waef\nfioöewa fjfiöoeajfoiewa jfifaj afjioewa jfewa\nfeijoaöjfi owjf waifjiewoaf iw fwea jfwejaireh\nfj oiewaöjfiwaf jwoafj ioajfi oewaöjfo2jfoiewajf ier\nfjieowajfiwajfiwojf oigiqjg ioewaf4i3g 80 fj fwifjoiew"
