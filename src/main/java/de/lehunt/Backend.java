@@ -5,14 +5,21 @@ import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient;
 import com.hivemq.client.mqtt.mqtt3.Mqtt3Client;
 import com.hivemq.client.mqtt.mqtt3.message.connect.connack.Mqtt3ConnAck;
 import com.hivemq.client.mqtt.mqtt3.message.publish.Mqtt3Publish;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.*;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
 public class Backend {
 
-    private static final String BROKER = "localhost";
+    private static final String BROKER = "192.168.2.184";
     private final String CLIENTID = "BackendClient";
     private final String SubscritionTopic = "+/+/up";
     private Mqtt3AsyncClient mqttClient;
@@ -119,63 +126,84 @@ public class Backend {
 
         @Override
         public String lookupHint(String huntId, String payload) {
+            String ext = ".json";
+            System.out.println(huntId);
 
             JSONObject json = new JSONObject(payload);
             String type = json.getString("type");
             int advertisement = json.getInt("advertisement");
+            int curStation = json.getInt("station");
 
-            // types are "NewBeacon" and "Registered"
-            switch (type) {
-                case "NewBeacon": {
-                    switch (huntId) {
-                        case "hunt1": {
-                            switch (advertisement) {
-                                case 1:
-                                    return "{type:NewInformation,message:This is your second Hint so you can find your first station." +
-                                            "jfiöoreajfioewaönfewajfiewaoöfewajfiewa" +
-                                            "fjeöajfioewajifvreujgiföoreaijfoewjaifojrewaf" +
-                                            "fieauireajfioewöajfioewaöjivfera waef" +
-                                            "fioöewa fjfiöoeajfoiewa jfifaj afjioewa jfewa" +
-                                            " feijoaöjfi owjf waifjiewoaf iw fwea jfwejaireh" +
-                                            " fj oiewaöjfiwaf jwoafj ioajfi oewaöjfo2jfoiewajf ier" +
-                                            " fjieowajfiwajfiwojf oigiqjg ioewaf4i3g 80 fj fwifjoiew}";
-                                case 2:
-                                    return "{\"type\":\"NewInformation\",\"message\":\"This is your third Hint so you can find the next station." +
-                                            "fijeowa fjw ieaofjiwoaf wf wifj ewiaojfoiewa  fjwaf wea" +
-                                            "fje iwaojf iwafjoa jfiwa jfiewjaf io ewajfioew afi ajf" +
-                                            "f jewoiaöjfi jier gfoiewaj fiewaj fiewjifo jewaio jfoiew" +
-                                            "j ifewoajf oiwajfi ajfiwoajfiowahgie jgioajfwiajfiewa jfoiew" +
-                                            "fj iwafwjfioewjafiowa jfiewoa jfiewoaöjfiewajf oiewhvidja" +
-                                            " fjioewajfaöjioewj fw wi afwiajf iowa jiwaf jiewfoiewa jfoi" +
-                                            "fjei wafjew oiafj iwaofjoiewjf oiewajf owajf ewoi jfoiewa\"}";
-                                default:
-                                    return "\"{type\":\"Error\":\"message\":\"Hint was not found on backend.\"}";
-                            }
+            // TODO: 13.01.2020 Check if the next station is the correct one
+            if(advertisement != curStation){
+                return "{\"type\":\"Info\",\"message\":\"You reached the false station. Keep searching on\"}";
+            }
+
+            return FindReadHunt(new String(new StringBuilder(huntId).append(ext)), advertisement);
+
+        }
+
+
+        public String FindReadHunt(String fileName, int beaconId){
+
+            File file = getFileFromResources(fileName);
+            if(file == null){
+                return "{\"type\":\"Error\", \"message\":\"Hunt doesn't exist\"}";
+            }
+
+            try {
+                FileInputStream fis = new FileInputStream(file);
+                byte[] data = new byte[(int) file.length()];
+                fis.read(data);
+                fis.close();
+                String json = new String(data, "UTF-8");
+
+                JSONObject obj = new JSONObject(json);
+                JSONArray arr = obj.getJSONArray("advertisements");
+
+                String response;
+
+                for(int i = 0; i < arr.length(); i++) {
+                    JSONObject object = arr.getJSONObject(i);
+
+                    // System.out.println(object);
+                    for(String key:object.keySet()){
+                        if (key.contentEquals(String.valueOf(beaconId))) {
+
+                            JSONObject tmp = object.getJSONObject(key);
+                            response = tmp.getString("message");
+                            return response;
                         }
-                        case "hunt2": {
-                            switch (advertisement) {
-                                case 1:
-                                    return "type:NewInformation,message:First hint here";
-                                case 2:
-                                    return "type:NewInformation,message:Second hint there";
-                                default:
-                                    return "Hint was not found on backend.";
-                            }
-                        }
-                        default:
-                            return "{type:Error,message:Hunt doesn't exist";
                     }
                 }
-                case "Registered":
-                    // sending the first hint to the client
-                    return "client registered, send first hint";
-                default:
-                    return "{type:Error,message:type doesn't exist";
+                return "Hint is not in the database";
+
+            } catch (FileNotFoundException e) {
+                // e.printStackTrace();
+                return "File not Found";
+            } catch (IOException e) {
+                // e.printStackTrace();
+                return "IOException";
             }
         }
 
 
+        // get file from classpath, resources folder
+        private File getFileFromResources(String fileName) {
+
+            ClassLoader classLoader = getClass().getClassLoader();
+
+            URL resource = classLoader.getResource(fileName);
+            if (resource == null) {
+                return null;
+                // throw new IllegalArgumentException("file is not found!");
+            } else {
+                return new File(resource.getFile());
+            }
+
+        }
     }
+
 
     public static void main(String[] args) {
         Backend backend = new Backend(new StaticHintLookupCallback());

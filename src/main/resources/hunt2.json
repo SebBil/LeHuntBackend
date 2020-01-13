@@ -1,0 +1,23 @@
+{
+  "id": "hunt2",
+  "advertisements":[
+    {
+      "1": {
+        "type": "NewInformation",
+        "message": "Hunt 2, Station 1, Hinweis zum erreichen der Station 2:\nThis is your second Hint so you can find your first station."
+      }
+    },
+    {
+      "2": {
+        "type": "NewInformation",
+        "message": "Hunt 2, Station 2, Hinweis zum erreichen der Station 3:\nHier sehen sie das Rätsel das sie lösen müssen um die station 3 zu erreichen"
+      }
+    },
+    {
+      "3": {
+        "type": "Finished",
+        "message": ""
+      }
+    }
+  ]
+}
