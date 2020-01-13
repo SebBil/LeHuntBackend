@@ -99,14 +99,14 @@ public class Backend {
             String responseTopic = huntId + "/" + clientId + "/down";
 
             // lookup new Hint
-            String response = hintLookupCallback.lookupHint(huntId, new String(mqtt3Publish.getPayloadAsBytes()));
+            JSONObject response = hintLookupCallback.lookupHint(huntId, new String(mqtt3Publish.getPayloadAsBytes()));
 
 
             // send out new Hint
             System.out.println("Sending response on topic '" + responseTopic + "'" + " with payload '" + response + "'.");
             client.publishWith()
                     .topic(responseTopic)
-                    .payload(response.getBytes())
+                    .payload(response.toString().getBytes())
                     .send();
 
         }
@@ -114,14 +114,14 @@ public class Backend {
 
     public interface HintLookupCallback {
 
-        String lookupHint(String huntId, String payload);
+        JSONObject lookupHint(String huntId, String payload);
 
     }
 
     public static class StaticHintLookupCallback implements HintLookupCallback {
 
         @Override
-        public String lookupHint(String huntId, String payload) {
+        public JSONObject lookupHint(String huntId, String payload) {
             String ext = ".json";
             System.out.println(huntId);
 
@@ -132,7 +132,7 @@ public class Backend {
 
             // TODO: 13.01.2020 Check if the next station is the correct one
             if(advertisement != curStation){
-                return "{\"type\":\"Info\",\"message\":\"You reached the false station. Keep searching on\"}";
+                return new JSONObject("{type:Info,message:You reached the false station. Keep searching on}");
             }
 
             return FindReadHunt(new String(new StringBuilder(huntId).append(ext)), advertisement);
@@ -140,11 +140,11 @@ public class Backend {
         }
 
 
-        public String FindReadHunt(String fileName, int beaconId){
+        public JSONObject FindReadHunt(String fileName, int beaconId){
 
             File file = getFileFromResources(fileName);
             if(file == null){
-                return "{\"type\":\"Error\", \"message\":\"Hunt doesn't exist\"}";
+                return new JSONObject("{type:Error, message:Hunt doesn't exist}");
             }
 
             try {
@@ -157,7 +157,6 @@ public class Backend {
                 JSONObject obj = new JSONObject(json);
                 JSONArray arr = obj.getJSONArray("advertisements");
 
-                String response;
 
                 for(int i = 0; i < arr.length(); i++) {
                     JSONObject object = arr.getJSONObject(i);
@@ -167,19 +166,18 @@ public class Backend {
                         if (key.contentEquals(String.valueOf(beaconId))) {
 
                             JSONObject tmp = object.getJSONObject(key);
-                            response = tmp.getString("message");
-                            return response;
+                            return tmp;
                         }
                     }
                 }
-                return "Hint is not in the database";
+                return new JSONObject("{type:Error,message:Hint is not in the database}");
 
             } catch (FileNotFoundException e) {
                 // e.printStackTrace();
-                return "File not Found";
+                return new JSONObject("{type:Error,message:The Hunt was not found}");
             } catch (IOException e) {
                 // e.printStackTrace();
-                return "IOException";
+                return new JSONObject("{type:Error,message:Input or Output failure}");
             }
         }
 
