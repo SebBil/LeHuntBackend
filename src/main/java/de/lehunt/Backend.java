@@ -10,16 +10,12 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
 public class Backend {
 
-    private static final String BROKER = "192.168.2.184";
+    private static final String BROKER = "localhost";
     private final String CLIENTID = "BackendClient";
     private final String SubscritionTopic = "+/+/up";
     private Mqtt3AsyncClient mqttClient;
