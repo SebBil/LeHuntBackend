@@ -15,12 +15,6 @@
     },
     {
       "2": {
-        "type": "NewInformation",
-        "message": "Hunt 1, Station 2, Hinweis zum erreichen der Station 3..."
-      }
-    },
-    {
-      "3": {
         "type": "Finished",
         "message": "Glückwunsch!!\nSie haben die Schnitzeljagd erfolgreich abgeschlossen"
       }
